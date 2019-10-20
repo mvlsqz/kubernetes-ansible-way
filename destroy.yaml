@@ -1,0 +1,36 @@
+- name: Destroy Kubernetes cluster components
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+  - name: Loading var files
+    include_vars:
+      dir: host_vars
+      ignore_unknown_extensions: True
+      extensions: ['yaml', 'json']
+
+  - import_tasks: compute-instances.yaml
+  - import_tasks: disks.yaml
+  - import_tasks: ip-address.yaml
+  - import_tasks: balancer.yaml
+  - import_tasks: firewall.yaml
+
+  - name: removing network
+    block:
+      - import_tasks: subnetwork.yaml
+      - import_tasks: network.yaml
+    rescue:
+      - name: Network still in use
+        debug:
+          msg: "Network service cant be removed, some resources still using it"
+
+  - name: cleanup local facts
+    local_action:
+      module: file
+      path: "host_vars/{{ item }}-{{ role }}.json"
+      state: "{{ state }}"
+    loop:
+      - address
+      - disk
+      - network
+      - subnetwork

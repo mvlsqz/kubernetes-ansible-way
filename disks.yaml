@@ -1,0 +1,31 @@
+- name: Instance disk
+  gcp_compute_disk:
+    auth_kind: "{{ auth_kind }}"
+    name: "{{ role }}-{{ item }}"
+    project: "{{ project }}"
+    service_account_file: "{{ service_account_file }}"
+    size_gb: 200
+    source_image: projects/ubuntu-os-cloud/global/images/family/ubuntu-1804-lts
+    state: "{{ state }}"
+    zone: "{{ zone }}"
+  register: disk
+  loop: "{{ range(count|int) | list }}"
+
+- name: Fact disk
+  set_fact:
+    kdisk: >-
+      {{
+        kdisk
+        | default([])
+        | combine({"disk": disk})
+      }}
+  when:
+    - state == 'present'
+
+- name: Disk info to local vars
+  local_action:
+    module: copy
+    content: "{{ kdisk }}"
+    dest: "host_vars/disk-{{role}}.json"
+  when:
+    - state == 'present'

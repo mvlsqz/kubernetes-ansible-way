@@ -1,0 +1,30 @@
+- name: Instance IP
+  gcp_compute_address:
+    name: "{{ role }}-{{ item }}-address"
+    region: "{{ region }}"
+    project: "{{ project }}"
+    auth_kind: "{{ auth_kind }}"
+    service_account_file: "{{ service_account_file }}"
+    scopes: "{{ scopes }}"
+    state: "{{ state }}"
+  register: address
+  loop: "{{ range(count|int) | list }}"
+
+- name: Fact address
+  set_fact:
+    kaddress: >-
+      {{
+        kaddress
+        | default([])
+        | combine({"address": address})
+      }}
+  when:
+    - state == 'present'
+
+- name: Address info to local vars
+  local_action:
+    module: copy
+    content: "{{ kaddress }}"
+    dest: "host_vars/address-{{role}}.json"
+  when:
+    - state == 'present'
