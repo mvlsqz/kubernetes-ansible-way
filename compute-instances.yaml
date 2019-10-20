@@ -31,6 +31,6 @@
     state: "{{ state }}"
     tags:
       items:
-        - kubernetes-hardway-mvlsqz
+        - "{{ network_name }}"
         - "{{ role }}"
   loop: "{{ range(count|int) | list }}"
