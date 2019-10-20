@@ -1,12 +1,13 @@
 auth_kind: serviceaccount
+# if cidr range is changed, network, and subnetwork must be updated
 ip_cidr_range: 10.240.0.0/24
-lb_ip_name: kubernetes-ansible-way-lb-ip
-network_name: kubernetes-ansible-way-network
+lb_ip_name: kubernetes-ansibleway-lb-ip
+network_name: kubernetes-ansibleway-network
 prefix: "{{ 1 if role == 'controller' else 2 }}"
-project: full-project-name
+project: "{{ lookup('env', 'GOOGLE_CLOUD_PROJECT_NAME') }}"
 region: us-west1
 scopes:
   - https://www.googleapis.com/auth/compute
-service_account_file: service_account_file.json
-subnetwork_name: kubernetes-ansible-way-subnetwork
+service_account_file: "{{ lookup('env', 'SERVICE_ACCOUNT_FILE') }}"
+subnetwork_name: kubernetes-ansibleway-subnetwork
 zone: us-west1-c
