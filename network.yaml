@@ -5,13 +5,13 @@
       project: "{{ project }}"
       scopes: "{{ scopes }}"
       service_account_file: "{{ service_account_file }}"
-      state: present
+      state: absent
 
 - name: Kubernetes network
   gcp_compute_network:
       auth_kind: "{{ auth_kind }}"
       auto_create_subnetworks: false
-      name: kubernetes-hardway-mvlsqz
+      name: "{{ network_name }}"
       project: "{{ project }}"
       scopes: "{{ scopes }}"
       service_account_file: "{{ service_account_file }}"
