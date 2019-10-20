@@ -1,8 +1,8 @@
 - name: Kubernetes subnetwork
   gcp_compute_subnetwork:
       auth_kind: "{{ auth_kind }}"
-      ip_cidr_range: 10.240.0.0/24
-      name: kubernetes-subnet
+      ip_cidr_range: "{{ ip_cidr_range }}"
+      name: "{{ subnetwork_name }}"
       network: "{{ network }}"
       project: "{{ project }}"
       region: "{{ region }}"

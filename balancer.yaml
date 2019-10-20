@@ -1,7 +1,7 @@
 - name: IP address for the LB
   gcp_compute_address:
     auth_kind: "{{ auth_kind }}"
-    name: kubernetes-hardway-mvlsqz
+    name: "{{ lb_ip_name }}"
     project: "{{ project }}"
     region: "{{ region }}"
     scopes: "{{ scopes }}"
