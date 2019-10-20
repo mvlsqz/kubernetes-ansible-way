@@ -1,0 +1,31 @@
+- name: Kubernetes subnetwork
+  gcp_compute_subnetwork:
+      auth_kind: "{{ auth_kind }}"
+      ip_cidr_range: 10.240.0.0/24
+      name: kubernetes-subnet
+      network: "{{ network }}"
+      project: "{{ project }}"
+      region: "{{ region }}"
+      scopes: "{{ scopes }}"
+      service_account_file: "{{ service_account_file }}"
+      state: "{{ state }}"
+  register: subnetwork
+
+- name: Local fact subnetwork
+  set_fact:
+    ksubnetwork: >-
+      {{
+        ksubnetwork
+        | default([])
+        | combine({"subnetwork": subnetwork})
+      }}
+  when:
+    - state == 'present'
+
+- name: Subnetwork to local vars
+  local_action:
+    module: copy
+    content: "{{ ksubnetwork }}"
+    dest: "host_vars/subnetwork-{{ role }}.json"
+  when:
+    - state == 'present'

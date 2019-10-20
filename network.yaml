@@ -1,0 +1,38 @@
+- name: Get rid of default network
+  gcp_compute_network:
+      auth_kind: "{{ auth_kind }}"
+      name: default
+      project: "{{ project }}"
+      scopes: "{{ scopes }}"
+      service_account_file: "{{ service_account_file }}"
+      state: present
+
+- name: Kubernetes network
+  gcp_compute_network:
+      auth_kind: "{{ auth_kind }}"
+      auto_create_subnetworks: false
+      name: kubernetes-hardway-mvlsqz
+      project: "{{ project }}"
+      scopes: "{{ scopes }}"
+      service_account_file: "{{ service_account_file }}"
+      state: "{{ state }}"
+  register: network
+
+- name: Local fact network
+  set_fact:
+    knetwork: >-
+      {{
+        knetwork
+        | default([])
+        | combine({"network": network})
+      }}
+  when:
+    - state == 'present'
+
+- name: Network to local vars
+  local_action:
+    module: copy
+    content: "{{ knetwork }}"
+    dest: "host_vars/network-{{ role }}.json"
+  when:
+    - state == 'present'

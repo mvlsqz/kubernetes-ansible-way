@@ -1,0 +1,47 @@
+- name: Internal firewall rules
+  gcp_compute_firewall:
+      allowed:
+      - ip_protocol: "{{ item }}"
+      auth_kind: "{{ auth_kind }}"
+      name: "kubernetes-internal-allow-{{ item }}"
+      network: "{{ network }}"
+      project: "{{ project }}"
+      scopes: "{{ scopes }}"
+      service_account_file: "{{ service_account_file }}"
+      source_ranges: 10.240.0.0/24,10.200.0.0/16
+      state: "{{ state }}"
+  loop:
+    - tcp
+    - udp
+    - icmp
+
+- name: External firewall rules
+  gcp_compute_firewall:
+      allowed:
+      - ip_protocol: "{{ item.name }}"
+        ports:
+        - "{{ item.number }}"
+      auth_kind: "{{ auth_kind }}"
+      name: "kubernetes-external-allow-{{ item.name }}-{{ item.number }}"
+      network: "{{ network }}"
+      project: "{{ project }}"
+      scopes: "{{ scopes }}"
+      service_account_file: "{{ service_account_file }}"
+      source_ranges: 0.0.0.0/0
+      state: "{{ state }}"
+  loop:
+    - { name: tcp, number: 22 }
+    - { name: tcp, number: 6443 }
+
+- name: External firewall rule icmp
+  gcp_compute_firewall:
+      allowed:
+      - ip_protocol: icmp
+      auth_kind: "{{ auth_kind }}"
+      name: kubernetes-external-allow-icmp
+      network: "{{ network }}"
+      project: "{{ project }}"
+      scopes: "{{ scopes }}"
+      service_account_file: "{{ service_account_file }}"
+      source_ranges: 0.0.0.0/0
+      state: "{{ state }}"

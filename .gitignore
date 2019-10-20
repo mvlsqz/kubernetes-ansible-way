@@ -1,0 +1,7 @@
+terraform/
+*.log
+*.json
+kms_keys.*
+*/*.json
+debug.*
+kms_key.yaml

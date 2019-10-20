@@ -1,0 +1,8 @@
+auth_kind: serviceaccount
+prefix: "{{ 1 if role == 'controller' else 2 }}"
+project: full-project-name
+region: us-west1
+scopes:
+  - https://www.googleapis.com/auth/compute
+service_account_file: service_account_file.json
+zone: us-west1-c
