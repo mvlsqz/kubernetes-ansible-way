@@ -7,7 +7,7 @@ This repo intent to follow steps described on Kelsey Hightower
 * GCP account
 * GCP project to build infrastructure
 
-# Setup virual environment (optional)
+# Setup virtual environment (optional)
 To avoid conflicts with old python versions or any other issue with python packages,
 I'd recomed you to use virtual python environment, for ease I use [mini conda](https://docs.conda.io/en/latest/miniconda.html) (installation/configuration is out of the scope of this tutorial)
 
