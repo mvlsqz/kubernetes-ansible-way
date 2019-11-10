@@ -3,7 +3,7 @@ This repo intent to follow steps described on Kelsey Hightower
 [kubernetes the hard way](https://github.com/kelseyhightower/kubernetes-the-hard-way) tutorial, but using ansible.
 
 # Requiremients
-* Ansible 2.8.6
+* Ansible 2.8.6+
 * GCP account
 * GCP project to build infrastructure
 
