@@ -2,7 +2,7 @@
   gcp_compute_instance:
     name: "{{ role }}-{{ item }}"
     can_ip_forward: yes
-    machine_type: n1-standard-1
+    machine_type: "{{ machine_type }}"
     network_interfaces:
     - network: "{{ network }}"
       access_configs:

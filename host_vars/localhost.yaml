@@ -2,6 +2,7 @@ auth_kind: serviceaccount
 # if cidr range is changed, network, and subnetwork must be updated
 ip_cidr_range: 10.240.0.0/24
 lb_ip_name: kubernetes-ansibleway-lb-ip
+machine_type: "{{ 'custom-2-2048' if role == 'controller' else 'n1-standard-1' }}"
 network_name: kubernetes-ansibleway-network
 prefix: "{{ 1 if role == 'controller' else 2 }}"
 project: "{{ lookup('env', 'GOOGLE_CLOUD_PROJECT_NAME') }}"

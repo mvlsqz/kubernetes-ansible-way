@@ -4,7 +4,7 @@
     name: "{{ role }}-{{ item }}"
     project: "{{ project }}"
     service_account_file: "{{ service_account_file }}"
-    size_gb: 200
+    size_gb: 20
     source_image: projects/ubuntu-os-cloud/global/images/family/ubuntu-1804-lts
     state: "{{ state }}"
     zone: "{{ zone }}"
