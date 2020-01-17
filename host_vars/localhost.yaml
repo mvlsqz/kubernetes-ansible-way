@@ -12,3 +12,5 @@ scopes:
 service_account_file: "{{ lookup('env', 'SERVICE_ACCOUNT_FILE') }}"
 subnetwork_name: kubernetes-ansibleway-subnetwork
 zone: us-west1-c
+controllers: 1
+workers: 3

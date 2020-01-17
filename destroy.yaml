@@ -1,6 +1,8 @@
 - name: Destroy Kubernetes cluster components
   hosts: localhost
   gather_facts: false
+  vars:
+    count: "{{ controllers if role == 'controller' else workers }}"
 
   tasks:
   - name: Loading var files
