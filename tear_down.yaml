@@ -3,6 +3,7 @@
   gather_facts: false
   vars:
     count: "{{ controllers if role == 'controller' else workers }}"
+    state: absent
 
   tasks:
   - name: Loading var files

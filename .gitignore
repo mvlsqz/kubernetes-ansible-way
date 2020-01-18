@@ -6,3 +6,7 @@ kms_keys.*
 debug.*
 kms_key.yaml
 host_vars/localhost.yaml
+cka
+*.pem
+*.pub
+ssh.config

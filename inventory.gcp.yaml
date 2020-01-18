@@ -1,0 +1,17 @@
+# inventory.compute.gcp.yml
+---
+plugin: gcp_compute
+projects:
+  - kubernetes-lab-258722
+keyed_groups:
+  - key: zone
+hostnames:
+  - name
+filters: []
+groups:
+  controller: "'controller' in name"
+  worker: "'worker' in name"
+compose:
+  ansible_host: networkInterfaces[0].accessConfigs[0].natIP
+auth_kind: serviceaccount
+service_account_file: /Users/mvelasquez/Desktop/SandBox/kubernetes/service_account_file.json

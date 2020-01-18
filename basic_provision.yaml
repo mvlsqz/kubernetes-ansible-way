@@ -1,0 +1,5 @@
+- name: Disable firewall on {{ role }} instances
+  systemd:
+    name: ufw
+    state: stopped
+    enabled: no

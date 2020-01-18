@@ -3,6 +3,7 @@
   gather_facts: false
   vars:
     count: "{{ controllers if role == 'controller' else workers }}"
+    state: present
 
   tasks:
   - name: Load local variables
@@ -18,3 +19,11 @@
   - import_tasks: disks.yaml
   - import_tasks: ip-address.yaml
   - import_tasks: compute-instances.yaml
+
+- name: Run basic provision
+  hosts: "{{ role }}"
+  become: true
+  gather_facts: no
+
+  tasks:
+  - import_tasks: basic_provision.yaml
