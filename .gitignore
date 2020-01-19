@@ -10,3 +10,5 @@ cka
 *.pem
 *.pub
 ssh.config
+admin.csr ca.csr kube-controller-manager.csr kube-scheduler.csr kubernetes.csr service-account.csr worker-0.csr worker-1.csr worker-2.csr
+*.csr

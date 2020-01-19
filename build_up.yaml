@@ -13,17 +13,32 @@
       extensions: ['yaml']
 
   - import_tasks: network.yaml
+    when: build_infra == true
   - import_tasks: subnetwork.yaml
+    when: build_infra == true
   - import_tasks: firewall.yaml
+    when: build_infra == true
   - import_tasks: balancer.yaml
+    when: build_infra == true
   - import_tasks: disks.yaml
+    when: build_infra == true
   - import_tasks: ip-address.yaml
+    when: build_infra == true
   - import_tasks: compute-instances.yaml
+    when: build_infra == true
 
 - name: Run basic provision
   hosts: "{{ role }}"
   become: true
-  gather_facts: no
+  gather_facts: false
 
   tasks:
   - import_tasks: basic_provision.yaml
+
+- name: Installing client Tools
+  hosts: controller
+  become: true
+  gather_facts: false
+
+  tasks:
+  - import_tasks: client_tools.yaml
