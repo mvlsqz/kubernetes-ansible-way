@@ -3,3 +3,64 @@
     name: ufw
     state: stopped
     enabled: no
+
+- name: Updating /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_secondary_address}} {{ item }}.example.com {{ item }}"
+    state: present
+  loop: "{{ groups.all }}"
+
+- name: Install docker required packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg-agent
+    - software-properties-common
+
+- name: adding docker gpg key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: adding docker community repository
+  apt_repository:
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable'
+    state: present
+
+- name: Installing docker community
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+
+- name : Configuring user as docker user
+  user:
+    name: mvelasquez
+    groups: docker
+    append: yes
+
+- name: Creating docker systemd default dir
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    owner: root
+    group: root
+
+- name: Configuring docker daemon
+  copy:
+    src: files/daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+  notify:
+    - reload_systemd
+    - restart_docker

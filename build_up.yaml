@@ -13,32 +13,43 @@
       extensions: ['yaml']
 
   - import_tasks: network.yaml
-    when: build_infra == true
+    when: build_infra == "true"
   - import_tasks: subnetwork.yaml
-    when: build_infra == true
+    when: build_infra == "true"
   - import_tasks: firewall.yaml
-    when: build_infra == true
+    when: build_infra == "true"
   - import_tasks: balancer.yaml
-    when: build_infra == true
+    when: build_infra == "true"
   - import_tasks: disks.yaml
-    when: build_infra == true
+    when: build_infra == "true"
   - import_tasks: ip-address.yaml
-    when: build_infra == true
+    when: build_infra == "true"
   - import_tasks: compute-instances.yaml
-    when: build_infra == true
+    when: build_infra == "true"
 
 - name: Run basic provision
-  hosts: "{{ role }}"
+  hosts: all
   become: true
   gather_facts: false
 
   tasks:
   - import_tasks: basic_provision.yaml
 
+  handlers:
+    - name: reload_systemd
+      systemd:
+        daemon_reload: yes
+
+    - name: restart_docker
+      systemd:
+        name: docker
+        state: restarted
+        enabled: yes
+
 - name: Installing client Tools
-  hosts: controller
+  hosts: all
   become: true
   gather_facts: false
 
   tasks:
-  - import_tasks: client_tools.yaml
+  - import_tasks: tools.yaml

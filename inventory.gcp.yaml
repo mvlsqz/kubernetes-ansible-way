@@ -13,5 +13,6 @@ groups:
   worker: "'worker' in name"
 compose:
   ansible_host: networkInterfaces[0].accessConfigs[0].natIP
+  ansible_secondary_address: networkInterfaces[0].networkIP
 auth_kind: serviceaccount
-service_account_file: /Users/mvelasquez/Desktop/SandBox/kubernetes/service_account_file.json
+service_account_file: /Users/mvelasquez/Downloads/kubernetes-lab-258722-74485333d4c9.json
