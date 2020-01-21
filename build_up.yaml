@@ -27,6 +27,10 @@
   - import_tasks: compute-instances.yaml
     when: build_infra == "true"
 
+  - meta: refresh_inventory
+  - pause:
+      minutes: 1
+
 - name: Run basic provision
   hosts: all
   become: true
