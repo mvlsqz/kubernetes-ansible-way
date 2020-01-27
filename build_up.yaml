@@ -4,6 +4,7 @@
   vars:
     count: "{{ controllers if role == 'controller' else workers }}"
     state: present
+    build_infra: true
 
   tasks:
   - name: Load local variables
@@ -13,19 +14,19 @@
       extensions: ['yaml']
 
   - import_tasks: network.yaml
-    when: build_infra == "true"
+    when: build_infra == true
   - import_tasks: subnetwork.yaml
-    when: build_infra == "true"
+    when: build_infra == true
   - import_tasks: firewall.yaml
-    when: build_infra == "true"
+    when: build_infra == true
   - import_tasks: balancer.yaml
-    when: build_infra == "true"
+    when: build_infra == true
   - import_tasks: disks.yaml
-    when: build_infra == "true"
+    when: build_infra == true
   - import_tasks: ip-address.yaml
-    when: build_infra == "true"
+    when: build_infra == true
   - import_tasks: compute-instances.yaml
-    when: build_infra == "true"
+    when: build_infra == true
 
   - meta: refresh_inventory
   - pause:
