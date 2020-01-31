@@ -22,6 +22,7 @@
     - curl
     - gnupg-agent
     - software-properties-common
+    - bash-completion
 
 - name: adding docker gpg key
   apt_key:

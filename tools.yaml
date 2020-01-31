@@ -43,6 +43,12 @@
     - kubelet
     - kubeadm
     - kubectl
+    - etcd-client
+
+- name: Enabling kubectl autocompletion
+  shell:
+    cmd: kubectl completion bash >/etc/bash_completion.d/kubectl
+    creates: /etc/bash_completion.d/kubectl
 
 - name:
   service:
