@@ -45,11 +45,22 @@
       systemd:
         daemon_reload: yes
 
-    - name: restart_docker
+    - name: restart_containerd
       systemd:
         name: containerd
         state: restarted
         enabled: yes
+
+    - name: kernel_mods_reload
+      shell: |
+        modprobe "{{ item }}"
+      loop:
+        - overlay
+        - br_netfilter
+
+    - name: reload sysctl
+      shell: |
+        sysctl --system
 
 - name: Installing client Tools
   hosts: all
