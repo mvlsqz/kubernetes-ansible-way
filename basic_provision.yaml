@@ -39,8 +39,6 @@
     name: "{{ item }}"
     state: present
   loop:
-    - docker-ce
-    - docker-ce-cli
     - containerd.io
 
 - name : Configuring user as docker user
@@ -49,19 +47,16 @@
     groups: docker
     append: yes
 
-- name: Creating docker systemd default dir
+- name: Creating containerd config dir
   file:
-    path: /etc/systemd/system/docker.service.d
+    path: /etc/containerd
     state: directory
     owner: root
     group: root
 
 - name: Configuring docker daemon
-  copy:
-    src: files/daemon.json
-    dest: /etc/docker/daemon.json
-    owner: root
-    group: root
+  shell: |
+    containerd config default > /etc/containerd/config.toml
   notify:
     - reload_systemd
-    - restart_docker
+    - restart_containerd
