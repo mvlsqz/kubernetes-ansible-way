@@ -65,12 +65,7 @@
     state: present
   loop:
     - containerd.io
-
-- name : Configuring user as docker user
-  user:
-    name: mvelasquez
-    groups: docker
-    append: yes
+  when: "'worker' in group_names"
 
 - name: Creating containerd config dir
   file:
@@ -78,10 +73,50 @@
     state: directory
     owner: root
     group: root
+  when: "'worker' in group_names"
+
+- name: Getting pods CIDR
+  shell: |
+    curl -s -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/attributes/pod-cidr
+  register: pods_cidr
+  when: "'worker' in group_names"
+
+- name: saving pods_cidr value
+  set_fact:
+    pods_cidr: "{{ pods_cidr.stdout }}"
+  when: "'worker' in group_names"
+
+- name: configuring cni
+  file:
+    path: /etc/cni/net.d
+    state: directory
+    owner: root
+    group: root
+  when: "'worker' in group_names"
+
+- name: configuring cni bridge
+  template:
+    src: templates/cni-bridge.conf.j2
+    dest: /etc/cni/net.d/10-bridge.conf
+    owner: root
+    group: root
+  when: "'worker' in group_names"
+
+- name: configuring cni loopback
+  template:
+    src: templates/cni-loopback.conf.j2
+    dest: /etc/cni/net.d/99-loopback.conf
+    owner: root
+    group: root
+  when: "'worker' in group_names"
 
 - name: Configuring docker daemon
-  shell: |
-    containerd config default > /etc/containerd/config.toml
+  copy:
+    src: files/config.toml
+    dest: /etc/containerd/config.toml
+    owner: root
+    group: root
   notify:
     - reload_systemd
     - restart_containerd
+  when: "'worker' in group_names"

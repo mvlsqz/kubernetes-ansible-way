@@ -58,7 +58,7 @@
         - overlay
         - br_netfilter
 
-    - name: reload sysctl
+    - name: reload_sysctl
       shell: |
         sysctl --system
 

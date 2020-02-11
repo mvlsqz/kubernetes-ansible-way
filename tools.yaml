@@ -1,21 +1,3 @@
-#- name: install cfssl and cfssljson
-#  get_url:
-#    url: "{{ item.source }}"
-#    dest: "{{ item.destination }}"
-#  loop:
-#    - { source: 'https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/darwin/cfssl', destination: '/usr/local/bin/cfssl' }
-#    - { source: 'https://storage.googleapis.com/kubernetes-the-hard-way/cfssl/darwin/cfssljson', destination: '/usr/local/bin/cfssljson' }
-#    - { source: 'https://storage.googleapis.com/kubernetes-release/release/v1.15.3/bin/linux/amd64/kubectl', destination: '/usr/local/bin/kubectl'}
-#
-#- name: Adding execution bit to tools
-#  file:
-#    path: "{{ item }}"
-#    mode: '0777'
-#  loop:
-#    - /usr/local/bin/cfssl
-#    - /usr/local/bin/cfssljson
-#    - /usr/local/bin/kubectl
-
 - name: Install iptables backends
   package:
     name: "{{ item }}"
@@ -49,6 +31,13 @@
   shell:
     cmd: kubectl completion bash >/etc/bash_completion.d/kubectl
     creates: /etc/bash_completion.d/kubectl
+
+- name: updating kubelet cgroup driver
+  lineinfile:
+    dest: /etc/default/kubelet
+    line: 'KUBELET_EXTRA_ARGS=--cgroup-driver=systemd'
+    state: present
+    create: yes
 
 - name:
   service:
